@@ -14,6 +14,8 @@ HeatWave demonstrates the trend of some of the key factors contributing to globa
 
 ## Functionality & MVP
 
+![HeatWaveApp](https://github.com/sunaynab/heatwave/blob/master/HeatWave.png)
+
 Users are able to view these trends via a line graph displaying these trends. Users have the ability to adjust:
 
 * Current Year
