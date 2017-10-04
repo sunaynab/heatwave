@@ -1,0 +1,25 @@
+{
+  "name": "Heatwave",
+  "version": "1.0.0",
+  "description": "## Background and Overview",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunaynab/heatwave.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sunaynab/heatwave/issues"
+  },
+  "homepage": "https://github.com/sunaynab/heatwave#readme",
+  "dependencies": {
+    "d3": "^4.10.2",
+    "d3-shape": "^1.2.0",
+    "webpack": "^3.6.0"
+  }
+}

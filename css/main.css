@@ -1,0 +1,12 @@
+.seaLevels-info {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+  margin-left: 20px;
+  text-align: center;
+}
+
+body {
+  display: flex;
+  flex-direction: row;
+}
