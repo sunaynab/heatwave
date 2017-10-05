@@ -3,149 +3,35 @@
   <head>
     <meta charset="utf-8">
     <title>HeatWave</title>
-
-    <link rel="stylesheet" type="text/css" href="/css/main.css">
-
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Pontano+Sans" rel="stylesheet">
     <script src="d3/d3.js"></script>
     <!-- <script type="text/javascript" src="./seaLevels.js" charset="utf-8"></script> -->
   </head>
+  <link rel="stylesheet" type="text/css" href="/css/main.css">
   <body>
     <div class="seaLevels-info">
       <h1>Sea Levels</h1>
       <span>
         Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
       </span>
+      <h2>Year:</h2>
+      <div class="year">
+      </div>
+      <h2>Sea Level Change</h2>
+      <span>in mm<span>
+      <div class="seaLevel">
+      </div>
     </div>
-    <div class="seaLevels"></div>
-    <script type="text/javascript">
-
-    // import * as d3 from "./node_modules/d3";
-
-    // set up size of line chart
-    const margin = {top: 30, right: 30, bottom: 20, left: 40},
-      width = 800 - margin.left - margin.right,
-      height = 600 - margin.top - margin.bottom;
-
-    const bisectYear = d3.bisector( d => { return d.Year; }).left
-
-    // Scales
-
-    const x = d3.scaleLinear()
-      .range([0, width]);
+    <div class="graphslider">
+      <div class="seaLevels"></div>
+      <div class="slidecontainer">
+        <input type="range" min="1880" max="2016" value="50" class="slider" id="myRange">
+        <span class="value"></span>
+      </div>
+    </div>
+    <script type="text/javascript" src="./bundle.js">
 
 
-    const y = d3.scaleLinear()
-      .range([height, 0]);
-
-    // Create Axes
-
-    const xAxis = d3.axisBottom()
-      .scale(x)
-      .tickFormat(d3.format("d"));
-
-    const yAxis = d3.axisLeft()
-      .scale(y);
-
-    const line = d3.line()
-      .x(d => (x(d.Year)))
-      .y(d => (y(d.seaLevels)))
-
-    const svg = d3.select(".seaLevels").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
-
-    d3.csv("Data.csv", (error, data) => {
-      if (error) throw error;
-      data.forEach (d => {
-        d.Year = +d.Year;
-        d.seaLevels = +d.seaLevels;
-      });
-
-      x.domain(d3.extent(data, (d => (d.Year))));
-      y.domain(d3.extent(data, (d => (d.seaLevels))));
-
-      svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-
-      svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-
-      const path = svg.append("path")
-        .data([data])
-        .attr("class", "line")
-        .attr("d", line)
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 2)
-        .attr("fill", "none")
-        .on("mouseover", handleMouseOver)
-        .on("mouseout", handleMouseOut)
-
-      // const focus = svg.append("g")
-      //   .attr("class", "focus")
-      //   .style("display", "none");
-      //
-      // focus.append("circle")
-      //   .attr("r", 4.5)
-      //   .attr("fill", "steelblue")
-      //
-      // focus.append("text")
-      //   .attr("x", 9)
-      //   .attr("dy", ".35em");
-      //
-      // svg.append("rect")
-      //   .attr("class", "overlay")
-      //   .attr("width", width)
-      //   .attr("height", height)
-      //   .on("mouseover", () => { focus.style("display", null)})
-      //   .on("mouseout", () => {focus.style( "display", "none")})
-      //   .on("mousemove", handleMouseMove)
-
-
-        function handleMouseOver(d, i) {
-          svg.append("circle")
-            .attr({
-              cx: 25, cy: 25, r: 25, fill: "steelblue"
-            });
-
-          const m = d3.mouse(this);
-          svg.append("text")
-          .attr("id", "t" + d.Year + "-" + d.seaLevels + "-" + i)
-          .attr("x", () => (d.Year))
-          .attr("y", () => (d.seaLevels))
-          .text([(Math.round((m[0]*0.1831)+1880)), (Math.round((m[1]*-.4538) + 77.95 ))]);  // Value of the text
-        }
-
-        function handleMouseOut(d, i){
-          d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();
-        }
-
-        // function handleMouseMove(){
-        //   var x0 = x.invert(d3.mouse(this)[0]),
-        //     i = bisectYear(data, x0, 1),
-        //     d0 = data[i - 1],
-        //     d1 = data[i],
-        //     d = x0 - d0.Year > d1.Year - x0 ? d1 : d0;
-        // focus.attr("transform", "translate(" + x(d.Year) + "," + y(d.seaLevels) + ")");
-        // focus.select("text").text(d.seaLevels);
-        //
-        // }
-    });
-
-    // function handleMouseOut(d, i) {
-    //   // Use D3 to select element, change color back to normal
-    //   d3.select(this).attr({
-    //     fill: "black",
-    //   });
-    //
-    //   // Select text by id and then remove
-    //   d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();  // Remove text location
-    // }
 </script>
 
 </script>

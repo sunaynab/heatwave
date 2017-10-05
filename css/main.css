@@ -10,3 +10,36 @@ body {
   display: flex;
   flex-direction: row;
 }
+
+.graphslider{
+  display: flex;
+  flex-direction: column;
+}
+
+.slidecontainer{
+  margin-left: 40px;
+}
+
+input {
+  width: 730px;
+}
+
+span, .year {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+}
+
+h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+}
+
+h2 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+}
+
+.seaLevels {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+}
