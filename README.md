@@ -1,5 +1,7 @@
 # HeatWave
 
+[Live Demo](https://sunaynab.github.io/heatwave/)
+
 In recent years, climate change has become a key focus for the global population. Scientists are noticing climate change patterns that could have potentially devastating effects on the well-being of the globe.
 
 Heatwave is a data visualization tool that allows users to explore the trends of key factors contributing to global warming.
