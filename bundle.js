@@ -9236,7 +9236,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             const year = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").append("text")
             .text(yr);
             const Temp = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").append("text")
-            .text(Math.round(table[yr]));
+            .text(table[yr]);
             focus.select("circle.y")
               .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
               .attr("display", null);

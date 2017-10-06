@@ -220,7 +220,7 @@ import * as d3 from "./node_modules/d3";
             const year = d3.select(".year").append("text")
             .text(yr);
             const Temp = d3.select(".seaLevel").append("text")
-            .text(Math.round(table[yr]));
+            .text(table[yr]);
             focus.select("circle.y")
               .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
               .attr("display", null);

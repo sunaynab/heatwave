@@ -1,67 +1,32 @@
 # HeatWave
 
-## Background and Overview
-
 In recent years, climate change has become a key focus for the global population. Scientists are noticing climate change patterns that could have potentially devastating effects on the well-being of the globe.
 
-HeatWave demonstrates the trend of some of the key factors contributing to global warming. These factors include:
+Heatwave is a data visualization tool that allows users to explore the trends of key factors contributing to global warming.
+
+Factors available to explore via a dropdown menu include:
 
 * Sea Levels
-* Artic Sea Ice Minimums (Sept of each year)
 * Global Average Temperatures
-* CO2 Levels
-* Polar Graph displaying all statistics
+* Carbon Dioxide Levels
 
-## Functionality & MVP
+## Usage
 
-![HeatWaveApp](https://github.com/sunaynab/heatwave/blob/master/HeatWave.png)
+![HeatWave](https://github.com/sunaynab/heatwave/Screenshots/HeatWave.png)
 
-Users are able to view these trends via a line graph displaying these trends. Users have the ability to adjust:
+Users have the ability to interact with specific data points through:
+* Direct mouseover of the Graph
+* Adjustment of slider
 
-* Current Year
-* Year Ranges
-* Key Factors
+User may also explore the different factors related to climate change by choosing a different selection from the dropdown menu.
 
-Also included will be a brief summary of each factor and how it plays a role in determining the extent of global warming.
+## Technologies
 
-## Architecture and Technologies
+The d3.js library was utilized extensively to create interactive events as well as construct the data visualizations for each factor.
 
-* D3.js
-* Webpack to bundle scripts
-* Vanilla JavaScript for conditional rendering of different graphs
+## Future Improvements
 
-## Implementation Timeline
-
-### Over the weekend:
-
-* Collect and format all necessary data for creating graphs.
-* Become familiar with d3 library
-* Research and formulate summaries for each factor.
-
-### Day 1:
-
-Setup the Node modules, create `webpack.config.js` file for webpack. Create an entry file and write out the bare bones for each graph.
-
-### Day 2:
-
-* Create each graph using d3.
-* Write mouseover events.
-
-### Day 3:
-
-* Write out logic for switching between graphs.
-* Write out logic for adjusting year range.
-* Write out logic for switching values when adjusting current year.
-* Begin styling
-
-### Day 4:
-
-* Complete the styling of each graph.
-* Create slider for adjusting year.
-* Create buttons for toggling key factors
-* Create inputs for adjusting year range.
-
-## Bonus Features
-
-* Create a graph that combines data from all key factors for each year.
-* Create graphs that combine data for two key factors (CO2 levels + Global Temp and/or Global Temp + Sea levels)
+* Include the ability for users to adjust year ranges for each factor.
+* Provide data for other indicators of climate change such as Artic Sea Ice Minimums and Antartica Land Mass measurements.
+* Include a polar graph including all factors analyzed that updates as the year is adjusted by the user.
+* Further refine the user interface by adding instructions on how to utilize the tool.
