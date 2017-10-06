@@ -9014,11 +9014,8 @@ function transform(node) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__ = __webpack_require__(170);
-// import * from './seaLevels';
-// document.addEventListener("DOMContentLoaded", () => {
-//   console.log(svg);
-//   svg();
-// });
+
+
 
 
 
@@ -9063,14 +9060,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   const focus = svg.append("g")
     .style("display", "none");
 
-  __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["d" /* csv */]("Data.csv", (error, data) => {
+  const table = {};
+
+  __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["d" /* csv */]("sealevels.csv", (error, data) => {
     if (error) throw error;
     data.forEach (d => {
       d.Year = +d.Year;
       d.seaLevels = +d.seaLevels;
+      table[+d.Year] = +d.seaLevels;
     });
 
-    x.domain(__WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["e" /* extent */](data, (d => (d.Year))));
+
+
+
+    x.domain([1880, 2013]);
     y.domain(__WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["e" /* extent */](data, (d => (d.seaLevels))));
 
     svg.append("g")
@@ -9101,8 +9104,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       .style("fill", "none")
       .style("pointer-events", "all")
       .on("mouseover", handleMouseOver)
-      .on("mouseout", handleMouseOut)
       .on("mousemove", handleMouseMove);
+
+      const input = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input")
+      .on("change", handleSliderChange);
+
+      function handleSliderChange() {
+        const yr = input._groups[0][0].value;
+        __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").text("");
+        __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").text("");
+        const year = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").append("text")
+        .text(yr);
+        const seaLevel = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").append("text")
+        .text(Math.round(table[yr]));
+        focus.select("circle.y")
+          .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
+          .attr("display", null);
+        __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".value").text(yr);
+      }
+
 
       function handleMouseOver () {
         focus.style("display", null);

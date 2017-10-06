@@ -1,10 +1,7 @@
-// import * from './seaLevels';
-// document.addEventListener("DOMContentLoaded", () => {
-//   console.log(svg);
-//   svg();
-// });
 
 import * as d3 from "./node_modules/d3";
+
+
 
   // set up size of line chart
   const margin = {top: 30, right: 30, bottom: 20, left: 40},
@@ -45,14 +42,20 @@ import * as d3 from "./node_modules/d3";
   const focus = svg.append("g")
     .style("display", "none");
 
-  d3.csv("Data.csv", (error, data) => {
+  const table = {};
+
+  d3.csv("sealevels.csv", (error, data) => {
     if (error) throw error;
     data.forEach (d => {
       d.Year = +d.Year;
       d.seaLevels = +d.seaLevels;
+      table[+d.Year] = +d.seaLevels;
     });
 
-    x.domain(d3.extent(data, (d => (d.Year))));
+
+
+
+    x.domain([1880, 2013]);
     y.domain(d3.extent(data, (d => (d.seaLevels))));
 
     svg.append("g")
@@ -83,8 +86,25 @@ import * as d3 from "./node_modules/d3";
       .style("fill", "none")
       .style("pointer-events", "all")
       .on("mouseover", handleMouseOver)
-      .on("mouseout", handleMouseOut)
       .on("mousemove", handleMouseMove);
+
+      const input = d3.select("input")
+      .on("change", handleSliderChange);
+
+      function handleSliderChange() {
+        const yr = input._groups[0][0].value;
+        d3.select(".year").text("");
+        d3.select(".seaLevel").text("");
+        const year = d3.select(".year").append("text")
+        .text(yr);
+        const seaLevel = d3.select(".seaLevel").append("text")
+        .text(Math.round(table[yr]));
+        focus.select("circle.y")
+          .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
+          .attr("display", null);
+        d3.select(".value").text(yr);
+      }
+
 
       function handleMouseOver () {
         focus.style("display", null);

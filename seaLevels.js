@@ -71,6 +71,20 @@ import * as d3 from "./node_modules/d3";
       .style("fill", "steelblue")
       .attr("r", 4);
 
+    const yr = d3.select("input")._groups[0][0].value;
+    d3.select(".year").text("");
+    d3.select(".seaLevel").text("");
+    d3.select(".year").append("text")
+    .text(yr);
+    d3.select(".seaLevel").append("text")
+    .text(Math.round(x.invert(yr)));
+
+    focus.select("circle.y")
+      .attr("transform", "translate (" + x(yr) + "," + y(x.invert(yr)) + ")");
+
+    d3.select(".value").text(yr);
+
+
     svg.append("rect")
       .attr("width", width)
       .attr("height", height)
@@ -85,6 +99,7 @@ import * as d3 from "./node_modules/d3";
       }
 
       function handleMouseMove() {
+        debugger;
         const x0 = x.invert(d3.mouse(this)[0]),
           i = bisectYear(data, x0, 1),
           d0 = data[i - 1],
@@ -108,6 +123,8 @@ import * as d3 from "./node_modules/d3";
       function handleMouseOut () {
         focus.style("display", "none");
       }
+
+
 
       // function handleSliderDrag () {
       //   d3.select(".year").text("");
