@@ -12,7 +12,7 @@ Factors available to explore via a dropdown menu include:
 
 ## Usage
 
-![HeatWave](https://github.com/sunaynab/heatwave/Screenshots/HeatWave.png)
+![HeatWave](https://github.com/sunaynab/heatwave/blob/master/Screenshots/HeatwaveLive.png)
 
 Users have the ability to interact with specific data points through:
 * Direct mouseover of the Graph
