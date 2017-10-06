@@ -32,6 +32,10 @@ select:hover {
   color: gray;
 }
 
+select:focus {
+  outline: lightgray 3px solid;
+}
+
 .year, .seaLevel {
   font-size: 60px;
   height: 85px;
@@ -76,7 +80,6 @@ h2 {
   margin-top: 10px;
   margin-bottom: 0px;
 }
-
 
 .seaLevels {
   font-family: 'Open Sans', sans-serif;
