@@ -19,6 +19,10 @@ select {
   text-align-last: center;
 }
 
+span {
+  justify-content: center;
+}
+
 select {
   /*for firefox*/
   -moz-appearance: none;
@@ -33,7 +37,7 @@ select:hover {
 }
 
 select:focus {
-  outline: lightgray 3px solid;
+  outline: none;
 }
 
 .year, .seaLevel {
@@ -41,8 +45,11 @@ select:focus {
   height: 85px;
   width: 150px;
   display: flex;
-  align-items: center;
+  align-content: center;
   font-weight: 100;
+  justify-content: center;
+  font-family: 'Open Sans', sans-serif;
+  margin-bottom: 0px;
 }
 
 
@@ -58,6 +65,9 @@ body {
 
 .slidecontainer{
   margin-left: 40px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 input {
@@ -71,12 +81,12 @@ span, .year {
 
 h1 {
   font-family: 'Open Sans', sans-serif;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 h2 {
   font-family: 'Open Sans', sans-serif;
-  font-weight: 500;
+  font-weight: 400;
   margin-top: 10px;
   margin-bottom: 0px;
 }
@@ -84,4 +94,8 @@ h2 {
 .seaLevels {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
+}
+
+.blurb{
+  font-size: 20px;
 }

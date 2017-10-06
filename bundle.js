@@ -9054,7 +9054,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     if (selected === "CO2") {
-
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".blurb").html("Carbon dioxide is released through activities such as burning fossil fuels, deforestation, respiration and volcanic eruptions. It is an important greenhouse gas that can contribute to rising global temperatures.");
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".stat").html("in ppm");
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".stat-header").html("Carbon Dioxide Levels");
       __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input").attr("min", "1958").attr("max", "2017");
       __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("svg").remove();
       const line = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["g" /* line */]()
@@ -9097,13 +9099,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           .data([data])
           .attr("class", "line")
           .attr("d", line)
-          .attr("stroke", "orange")
+          .attr("stroke", "#f47742")
           .attr("stroke-width", 2)
           .attr("fill", "none");
 
         focus.append("circle")
           .attr("class", "y")
-          .style("fill", "orange")
+          .style("fill", "#f47742")
           .attr("r", 4);
 
         svg.append("rect")
@@ -9162,7 +9164,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }
       });
     }else if(selected === "Temp"){
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".blurb").html("Of the 17 warmest years on record, 16 of them have occurred since 2001. One major factor that can contribute to increasing global temperatures include carbon dioxide levels.");
       __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input").attr("min", "1880").attr("max", "2016");
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".stat").html("in °C");
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".stat-header").html("Global Average Temperature");
       __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("svg").remove();
       const line = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["g" /* line */]()
         .x(d => (x(d.Year)))
@@ -9204,13 +9209,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           .data([data])
           .attr("class", "line")
           .attr("d", line)
-          .attr("stroke", "purple")
+          .attr("stroke", "#6132a3")
           .attr("stroke-width", 2)
           .attr("fill", "none");
 
         focus.append("circle")
           .attr("class", "y")
-          .style("fill", "purple")
+          .style("fill", "#6132a3")
           .attr("r", 4);
 
         svg.append("rect")
@@ -9254,7 +9259,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             const year = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").append("text")
             .text(d.Year);
             const Temp = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").append("text")
-            .text(Math.round(d.Temp));
+            .text(d.Temp);
 
             focus.select("circle.y")
               .attr("transform", "translate (" + x(d.Year) + "," + y(d.Temp) + ")");
@@ -9269,6 +9274,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }
       });
     }else{
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".blurb").html("Two factors contribute to rising sea levels: increased volumes of water from melting ice sheets and glaciers and the expansion of water as it warms up. Data displayed is from 1880 to 2013.");
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".stat").html("in mm");
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".stat-header").html("Sea Level Change");
       __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input").attr("min", "1880").attr("max", "2013");
       __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("svg").remove();
       const line = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["g" /* line */]()
@@ -9311,13 +9319,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           .data([data])
           .attr("class", "line")
           .attr("d", line)
-          .attr("stroke", "blue")
+          .attr("stroke", "#41a9f4")
           .attr("stroke-width", 2)
           .attr("fill", "none");
 
         focus.append("circle")
           .attr("class", "y")
-          .style("fill", "blue")
+          .style("fill", "]")
+          .style("fill", "#41a9f4")
           .attr("r", 4);
 
         svg.append("rect")

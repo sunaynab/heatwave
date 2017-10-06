@@ -38,7 +38,9 @@ import * as d3 from "./node_modules/d3";
 
 
     if (selected === "CO2") {
-
+      d3.select(".blurb").html("Carbon dioxide is released through activities such as burning fossil fuels, deforestation, respiration and volcanic eruptions. It is an important greenhouse gas that can contribute to rising global temperatures.");
+      d3.select(".stat").html("in ppm");
+      d3.select(".stat-header").html("Carbon Dioxide Levels");
       d3.select("input").attr("min", "1958").attr("max", "2017");
       d3.select("svg").remove();
       const line = d3.line()
@@ -81,13 +83,13 @@ import * as d3 from "./node_modules/d3";
           .data([data])
           .attr("class", "line")
           .attr("d", line)
-          .attr("stroke", "orange")
+          .attr("stroke", "#f47742")
           .attr("stroke-width", 2)
           .attr("fill", "none");
 
         focus.append("circle")
           .attr("class", "y")
-          .style("fill", "orange")
+          .style("fill", "#f47742")
           .attr("r", 4);
 
         svg.append("rect")
@@ -146,7 +148,10 @@ import * as d3 from "./node_modules/d3";
           }
       });
     }else if(selected === "Temp"){
+      d3.select(".blurb").html("Of the 17 warmest years on record, 16 of them have occurred since 2001. One major factor that can contribute to increasing global temperatures include carbon dioxide levels.");
       d3.select("input").attr("min", "1880").attr("max", "2016");
+      d3.select(".stat").html("in °C");
+      d3.select(".stat-header").html("Global Average Temperature");
       d3.select("svg").remove();
       const line = d3.line()
         .x(d => (x(d.Year)))
@@ -188,13 +193,13 @@ import * as d3 from "./node_modules/d3";
           .data([data])
           .attr("class", "line")
           .attr("d", line)
-          .attr("stroke", "purple")
+          .attr("stroke", "#6132a3")
           .attr("stroke-width", 2)
           .attr("fill", "none");
 
         focus.append("circle")
           .attr("class", "y")
-          .style("fill", "purple")
+          .style("fill", "#6132a3")
           .attr("r", 4);
 
         svg.append("rect")
@@ -238,7 +243,7 @@ import * as d3 from "./node_modules/d3";
             const year = d3.select(".year").append("text")
             .text(d.Year);
             const Temp = d3.select(".seaLevel").append("text")
-            .text(Math.round(d.Temp));
+            .text(d.Temp);
 
             focus.select("circle.y")
               .attr("transform", "translate (" + x(d.Year) + "," + y(d.Temp) + ")");
@@ -253,6 +258,9 @@ import * as d3 from "./node_modules/d3";
           }
       });
     }else{
+      d3.select(".blurb").html("Two factors contribute to rising sea levels: increased volumes of water from melting ice sheets and glaciers and the expansion of water as it warms up. Data displayed is from 1880 to 2013.");
+      d3.select(".stat").html("in mm");
+      d3.select(".stat-header").html("Sea Level Change");
       d3.select("input").attr("min", "1880").attr("max", "2013");
       d3.select("svg").remove();
       const line = d3.line()
@@ -295,13 +303,14 @@ import * as d3 from "./node_modules/d3";
           .data([data])
           .attr("class", "line")
           .attr("d", line)
-          .attr("stroke", "blue")
+          .attr("stroke", "#41a9f4")
           .attr("stroke-width", 2)
           .attr("fill", "none");
 
         focus.append("circle")
           .attr("class", "y")
-          .style("fill", "blue")
+          .style("fill", "]")
+          .style("fill", "#41a9f4")
           .attr("r", 4);
 
         svg.append("rect")
