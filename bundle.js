@@ -9054,6 +9054,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     if (selected === "CO2") {
+
       __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input").attr("min", "1958").attr("max", "2017");
       __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("svg").remove();
       const line = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["g" /* line */]()
@@ -9096,13 +9097,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           .data([data])
           .attr("class", "line")
           .attr("d", line)
-          .attr("stroke", "steelblue")
+          .attr("stroke", "orange")
           .attr("stroke-width", 2)
           .attr("fill", "none");
 
         focus.append("circle")
           .attr("class", "y")
-          .style("fill", "steelblue")
+          .style("fill", "orange")
           .attr("r", 4);
 
         svg.append("rect")
@@ -9310,13 +9311,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           .data([data])
           .attr("class", "line")
           .attr("d", line)
-          .attr("stroke", "orange")
+          .attr("stroke", "blue")
           .attr("stroke-width", 2)
           .attr("fill", "none");
 
         focus.append("circle")
           .attr("class", "y")
-          .style("fill", "orange")
+          .style("fill", "blue")
           .attr("r", 4);
 
         svg.append("rect")

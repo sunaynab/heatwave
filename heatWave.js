@@ -38,6 +38,7 @@ import * as d3 from "./node_modules/d3";
 
 
     if (selected === "CO2") {
+
       d3.select("input").attr("min", "1958").attr("max", "2017");
       d3.select("svg").remove();
       const line = d3.line()
@@ -80,13 +81,13 @@ import * as d3 from "./node_modules/d3";
           .data([data])
           .attr("class", "line")
           .attr("d", line)
-          .attr("stroke", "steelblue")
+          .attr("stroke", "orange")
           .attr("stroke-width", 2)
           .attr("fill", "none");
 
         focus.append("circle")
           .attr("class", "y")
-          .style("fill", "steelblue")
+          .style("fill", "orange")
           .attr("r", 4);
 
         svg.append("rect")
@@ -294,13 +295,13 @@ import * as d3 from "./node_modules/d3";
           .data([data])
           .attr("class", "line")
           .attr("d", line)
-          .attr("stroke", "orange")
+          .attr("stroke", "blue")
           .attr("stroke-width", 2)
           .attr("fill", "none");
 
         focus.append("circle")
           .attr("class", "y")
-          .style("fill", "orange")
+          .style("fill", "blue")
           .attr("r", 4);
 
         svg.append("rect")
