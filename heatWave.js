@@ -28,110 +28,335 @@ import * as d3 from "./node_modules/d3";
   const yAxis = d3.axisLeft()
     .scale(y);
 
-  const line = d3.line()
-    .x(d => (x(d.Year)))
-    .y(d => (y(d.seaLevels)));
+  renderGraphs();
 
-  export const svg = d3.select(".seaLevels").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+  const dropdown = d3.select("select").on("change", renderGraphs);
 
-  const focus = svg.append("g")
-    .style("display", "none");
-
-  const table = {};
-
-  d3.csv("sealevels.csv", (error, data) => {
-    if (error) throw error;
-    data.forEach (d => {
-      d.Year = +d.Year;
-      d.seaLevels = +d.seaLevels;
-      table[+d.Year] = +d.seaLevels;
-    });
+  function renderGraphs() {
+    const e = d3.select("select")._groups[0][0].options;
+    const selected = e[e.selectedIndex].value;
 
 
+    if (selected === "CO2") {
+      d3.select("input").attr("min", "1958").attr("max", "2017");
+      d3.select("svg").remove();
+      const line = d3.line()
+        .x(d => (x(d.Year)))
+        .y(d => (y(d.CO2)));
+
+      const svg = d3.select(".seaLevels").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+      const focus = svg.append("g")
+        .style("display", "none");
+
+      const table = {};
+
+      d3.csv("CO2.csv", (error, data) => {
+        if (error) throw error;
+        data.forEach (d => {
+          d.Year = +d.Year;
+          d.CO2 = +d.CO2;
+          table[+d.Year] = +d.CO2;
+        });
+
+        x.domain([1958, 2017]);
+        y.domain(d3.extent(data, (d => (d.CO2))));
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+        svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+        const path = svg.append("path")
+          .data([data])
+          .attr("class", "line")
+          .attr("d", line)
+          .attr("stroke", "steelblue")
+          .attr("stroke-width", 2)
+          .attr("fill", "none");
+
+        focus.append("circle")
+          .attr("class", "y")
+          .style("fill", "steelblue")
+          .attr("r", 4);
+
+        svg.append("rect")
+          .attr("width", width)
+          .attr("height", height)
+          .style("fill", "none")
+          .style("pointer-events", "all")
+          .on("mouseover", handleMouseOver)
+          .on("mousemove", handleMouseMove);
+
+          const input = d3.select("input")
+          .on("change", handleSliderChange);
+
+          function handleSliderChange() {
+            const yr = input._groups[0][0].value;
+            d3.select(".year").text("");
+            d3.select(".seaLevel").text("");
+            const year = d3.select(".year").append("text")
+            .text(yr);
+            const CO2 = d3.select(".seaLevel").append("text")
+            .text(Math.round(table[yr]));
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
+              .attr("display", null);
+            d3.select(".value").text(yr);
+          }
 
 
-    x.domain([1880, 2013]);
-    y.domain(d3.extent(data, (d => (d.seaLevels))));
+          function handleMouseOver () {
+            focus.style("display", null);
+          }
 
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+          function handleMouseMove() {
+            const x0 = x.invert(d3.mouse(this)[0]),
+              i = bisectYear(data, x0, 1),
+              d0 = data[i - 1],
+              d1 = data[i],
+              d = x0 - d0.Year > d1.Year - x0 ? d1 : d0;
+            d3.select(".year").text("");
+            d3.select(".seaLevel").text("");
+            const year = d3.select(".year").append("text")
+            .text(d.Year);
+            const CO2 = d3.select(".seaLevel").append("text")
+            .text(Math.round(d.CO2));
 
-    svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis);
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(d.Year) + "," + y(d.CO2) + ")");
 
-    const path = svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", line)
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 2)
-      .attr("fill", "none");
+            d3.select(".value").text(d.Year);
+            d3.select("input")._groups[0][0].value = d.Year;
 
-    focus.append("circle")
-      .attr("class", "y")
-      .style("fill", "steelblue")
-      .attr("r", 4);
+          }
 
-    svg.append("rect")
-      .attr("width", width)
-      .attr("height", height)
-      .style("fill", "none")
-      .style("pointer-events", "all")
-      .on("mouseover", handleMouseOver)
-      .on("mousemove", handleMouseMove);
+          function handleMouseOut () {
+            focus.style("display", "none");
+          }
+      });
+    }else if(selected === "Temp"){
+      d3.select("input").attr("min", "1880").attr("max", "2016");
+      d3.select("svg").remove();
+      const line = d3.line()
+        .x(d => (x(d.Year)))
+        .y(d => (y(d.Temp)));
 
-      const input = d3.select("input")
-      .on("change", handleSliderChange);
+      const svg = d3.select(".seaLevels").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
 
-      function handleSliderChange() {
-        const yr = input._groups[0][0].value;
-        d3.select(".year").text("");
-        d3.select(".seaLevel").text("");
-        const year = d3.select(".year").append("text")
-        .text(yr);
-        const seaLevel = d3.select(".seaLevel").append("text")
-        .text(Math.round(table[yr]));
-        focus.select("circle.y")
-          .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
-          .attr("display", null);
-        d3.select(".value").text(yr);
-      }
+      const focus = svg.append("g")
+        .style("display", "none");
+
+      const table = {};
+
+      d3.csv("Temperature.csv", (error, data) => {
+        if (error) throw error;
+        data.forEach (d => {
+          d.Year = +d.Year;
+          d.Temp = +d.Temp;
+          table[+d.Year] = +d.Temp;
+        });
+
+        x.domain([1880, 2016]);
+        y.domain(d3.extent(data, (d => (d.Temp))));
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+        svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+        const path = svg.append("path")
+          .data([data])
+          .attr("class", "line")
+          .attr("d", line)
+          .attr("stroke", "purple")
+          .attr("stroke-width", 2)
+          .attr("fill", "none");
+
+        focus.append("circle")
+          .attr("class", "y")
+          .style("fill", "purple")
+          .attr("r", 4);
+
+        svg.append("rect")
+          .attr("width", width)
+          .attr("height", height)
+          .style("fill", "none")
+          .style("pointer-events", "all")
+          .on("mouseover", handleMouseOver)
+          .on("mousemove", handleMouseMove);
+
+          const input = d3.select("input")
+          .on("change", handleSliderChange);
+
+          function handleSliderChange() {
+            const yr = input._groups[0][0].value;
+            d3.select(".year").text("");
+            d3.select(".seaLevel").text("");
+            const year = d3.select(".year").append("text")
+            .text(yr);
+            const Temp = d3.select(".seaLevel").append("text")
+            .text(Math.round(table[yr]));
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
+              .attr("display", null);
+            d3.select(".value").text(yr);
+          }
 
 
-      function handleMouseOver () {
-        focus.style("display", null);
-      }
+          function handleMouseOver () {
+            focus.style("display", null);
+          }
 
-      function handleMouseMove() {
-        const x0 = x.invert(d3.mouse(this)[0]),
-          i = bisectYear(data, x0, 1),
-          d0 = data[i - 1],
-          d1 = data[i],
-          d = x0 - d0.Year > d1.Year - x0 ? d1 : d0;
-        d3.select(".year").text("");
-        d3.select(".seaLevel").text("");
-        const year = d3.select(".year").append("text")
-        .text(d.Year);
-        const seaLevel = d3.select(".seaLevel").append("text")
-        .text(Math.round(d.seaLevels));
+          function handleMouseMove() {
+            const x0 = x.invert(d3.mouse(this)[0]),
+              i = bisectYear(data, x0, 1),
+              d0 = data[i - 1],
+              d1 = data[i],
+              d = x0 - d0.Year > d1.Year - x0 ? d1 : d0;
+            d3.select(".year").text("");
+            d3.select(".seaLevel").text("");
+            const year = d3.select(".year").append("text")
+            .text(d.Year);
+            const Temp = d3.select(".seaLevel").append("text")
+            .text(Math.round(d.Temp));
 
-        focus.select("circle.y")
-          .attr("transform", "translate (" + x(d.Year) + "," + y(d.seaLevels) + ")");
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(d.Year) + "," + y(d.Temp) + ")");
 
-        d3.select(".value").text(d.Year);
-        d3.select("input")._groups[0][0].value = d.Year;
+            d3.select(".value").text(d.Year);
+            d3.select("input")._groups[0][0].value = d.Year;
 
-      }
+          }
 
-      function handleMouseOut () {
-        focus.style("display", "none");
-      }
-  });
+          function handleMouseOut () {
+            focus.style("display", "none");
+          }
+      });
+    }else{
+      d3.select("input").attr("min", "1880").attr("max", "2013");
+      d3.select("svg").remove();
+      const line = d3.line()
+        .x(d => (x(d.Year)))
+        .y(d => (y(d.seaLevels)));
+
+      const svg = d3.select(".seaLevels").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+      const focus = svg.append("g")
+        .style("display", "none");
+
+      const table = {};
+
+      d3.csv("sealevels.csv", (error, data) => {
+        if (error) throw error;
+        data.forEach (d => {
+          d.Year = +d.Year;
+          d.seaLevels = +d.seaLevels;
+          table[+d.Year] = +d.seaLevels;
+        });
+
+        x.domain([1880, 2013]);
+        y.domain(d3.extent(data, (d => (d.seaLevels))));
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+        svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+        const path = svg.append("path")
+          .data([data])
+          .attr("class", "line")
+          .attr("d", line)
+          .attr("stroke", "orange")
+          .attr("stroke-width", 2)
+          .attr("fill", "none");
+
+        focus.append("circle")
+          .attr("class", "y")
+          .style("fill", "orange")
+          .attr("r", 4);
+
+        svg.append("rect")
+          .attr("width", width)
+          .attr("height", height)
+          .style("fill", "none")
+          .style("pointer-events", "all")
+          .on("mouseover", handleMouseOver)
+          .on("mousemove", handleMouseMove);
+
+          const input = d3.select("input")
+          .on("change", handleSliderChange);
+
+          function handleSliderChange() {
+            const yr = input._groups[0][0].value;
+            d3.select(".year").text("");
+            d3.select(".seaLevel").text("");
+            const year = d3.select(".year").append("text")
+            .text(yr);
+            const seaLevel = d3.select(".seaLevel").append("text")
+            .text(Math.round(table[yr]));
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
+              .attr("display", null);
+            d3.select(".value").text(yr);
+          }
+
+
+          function handleMouseOver () {
+            focus.style("display", null);
+          }
+
+          function handleMouseMove() {
+            const x0 = x.invert(d3.mouse(this)[0]),
+              i = bisectYear(data, x0, 1),
+              d0 = data[i - 1],
+              d1 = data[i],
+              d = x0 - d0.Year > d1.Year - x0 ? d1 : d0;
+            d3.select(".year").text("");
+            d3.select(".seaLevel").text("");
+            const year = d3.select(".year").append("text")
+            .text(d.Year);
+            const seaLevel = d3.select(".seaLevel").append("text")
+            .text(Math.round(d.seaLevels));
+
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(d.Year) + "," + y(d.seaLevels) + ")");
+
+            d3.select(".value").text(d.Year);
+            d3.select("input")._groups[0][0].value = d.Year;
+
+          }
+
+          function handleMouseOut () {
+            focus.style("display", "none");
+          }
+      });
+    }
+}

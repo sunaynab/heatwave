@@ -6,6 +6,11 @@
   text-align: center;
 }
 
+.select {
+  width: 500px;
+  height: 600px;
+}
+
 body {
   display: flex;
   flex-direction: row;

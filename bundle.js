@@ -9044,115 +9044,338 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   const yAxis = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["b" /* axisLeft */]()
     .scale(y);
 
-  const line = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["g" /* line */]()
-    .x(d => (x(d.Year)))
-    .y(d => (y(d.seaLevels)));
+  renderGraphs();
 
-  const svg = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevels").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
-/* harmony export (immutable) */ __webpack_exports__["svg"] = svg;
+  const dropdown = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("select").on("change", renderGraphs);
+
+  function renderGraphs() {
+    const e = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("select")._groups[0][0].options;
+    const selected = e[e.selectedIndex].value;
 
 
-  const focus = svg.append("g")
-    .style("display", "none");
+    if (selected === "CO2") {
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input").attr("min", "1958").attr("max", "2017");
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("svg").remove();
+      const line = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["g" /* line */]()
+        .x(d => (x(d.Year)))
+        .y(d => (y(d.CO2)));
 
-  const table = {};
+      const svg = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevels").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
 
-  __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["d" /* csv */]("sealevels.csv", (error, data) => {
-    if (error) throw error;
-    data.forEach (d => {
-      d.Year = +d.Year;
-      d.seaLevels = +d.seaLevels;
-      table[+d.Year] = +d.seaLevels;
-    });
+      const focus = svg.append("g")
+        .style("display", "none");
+
+      const table = {};
+
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["d" /* csv */]("CO2.csv", (error, data) => {
+        if (error) throw error;
+        data.forEach (d => {
+          d.Year = +d.Year;
+          d.CO2 = +d.CO2;
+          table[+d.Year] = +d.CO2;
+        });
+
+        x.domain([1958, 2017]);
+        y.domain(__WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["e" /* extent */](data, (d => (d.CO2))));
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+        svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+        const path = svg.append("path")
+          .data([data])
+          .attr("class", "line")
+          .attr("d", line)
+          .attr("stroke", "steelblue")
+          .attr("stroke-width", 2)
+          .attr("fill", "none");
+
+        focus.append("circle")
+          .attr("class", "y")
+          .style("fill", "steelblue")
+          .attr("r", 4);
+
+        svg.append("rect")
+          .attr("width", width)
+          .attr("height", height)
+          .style("fill", "none")
+          .style("pointer-events", "all")
+          .on("mouseover", handleMouseOver)
+          .on("mousemove", handleMouseMove);
+
+          const input = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input")
+          .on("change", handleSliderChange);
+
+          function handleSliderChange() {
+            const yr = input._groups[0][0].value;
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").text("");
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").text("");
+            const year = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").append("text")
+            .text(yr);
+            const CO2 = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").append("text")
+            .text(Math.round(table[yr]));
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
+              .attr("display", null);
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".value").text(yr);
+          }
 
 
+          function handleMouseOver () {
+            focus.style("display", null);
+          }
+
+          function handleMouseMove() {
+            const x0 = x.invert(__WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["h" /* mouse */](this)[0]),
+              i = bisectYear(data, x0, 1),
+              d0 = data[i - 1],
+              d1 = data[i],
+              d = x0 - d0.Year > d1.Year - x0 ? d1 : d0;
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").text("");
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").text("");
+            const year = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").append("text")
+            .text(d.Year);
+            const CO2 = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").append("text")
+            .text(Math.round(d.CO2));
+
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(d.Year) + "," + y(d.CO2) + ")");
+
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".value").text(d.Year);
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input")._groups[0][0].value = d.Year;
+
+          }
+
+          function handleMouseOut () {
+            focus.style("display", "none");
+          }
+      });
+    }else if(selected === "Temp"){
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input").attr("min", "1880").attr("max", "2016");
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("svg").remove();
+      const line = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["g" /* line */]()
+        .x(d => (x(d.Year)))
+        .y(d => (y(d.Temp)));
+
+      const svg = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevels").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+      const focus = svg.append("g")
+        .style("display", "none");
+
+      const table = {};
+
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["d" /* csv */]("Temperature.csv", (error, data) => {
+        if (error) throw error;
+        data.forEach (d => {
+          d.Year = +d.Year;
+          d.Temp = +d.Temp;
+          table[+d.Year] = +d.Temp;
+        });
+
+        x.domain([1880, 2016]);
+        y.domain(__WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["e" /* extent */](data, (d => (d.Temp))));
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+        svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+        const path = svg.append("path")
+          .data([data])
+          .attr("class", "line")
+          .attr("d", line)
+          .attr("stroke", "purple")
+          .attr("stroke-width", 2)
+          .attr("fill", "none");
+
+        focus.append("circle")
+          .attr("class", "y")
+          .style("fill", "purple")
+          .attr("r", 4);
+
+        svg.append("rect")
+          .attr("width", width)
+          .attr("height", height)
+          .style("fill", "none")
+          .style("pointer-events", "all")
+          .on("mouseover", handleMouseOver)
+          .on("mousemove", handleMouseMove);
+
+          const input = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input")
+          .on("change", handleSliderChange);
+
+          function handleSliderChange() {
+            const yr = input._groups[0][0].value;
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").text("");
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").text("");
+            const year = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").append("text")
+            .text(yr);
+            const Temp = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").append("text")
+            .text(Math.round(table[yr]));
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
+              .attr("display", null);
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".value").text(yr);
+          }
 
 
-    x.domain([1880, 2013]);
-    y.domain(__WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["e" /* extent */](data, (d => (d.seaLevels))));
+          function handleMouseOver () {
+            focus.style("display", null);
+          }
 
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+          function handleMouseMove() {
+            const x0 = x.invert(__WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["h" /* mouse */](this)[0]),
+              i = bisectYear(data, x0, 1),
+              d0 = data[i - 1],
+              d1 = data[i],
+              d = x0 - d0.Year > d1.Year - x0 ? d1 : d0;
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").text("");
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").text("");
+            const year = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").append("text")
+            .text(d.Year);
+            const Temp = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").append("text")
+            .text(Math.round(d.Temp));
 
-    svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis);
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(d.Year) + "," + y(d.Temp) + ")");
 
-    const path = svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", line)
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 2)
-      .attr("fill", "none");
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".value").text(d.Year);
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input")._groups[0][0].value = d.Year;
 
-    focus.append("circle")
-      .attr("class", "y")
-      .style("fill", "steelblue")
-      .attr("r", 4);
+          }
 
-    svg.append("rect")
-      .attr("width", width)
-      .attr("height", height)
-      .style("fill", "none")
-      .style("pointer-events", "all")
-      .on("mouseover", handleMouseOver)
-      .on("mousemove", handleMouseMove);
+          function handleMouseOut () {
+            focus.style("display", "none");
+          }
+      });
+    }else{
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input").attr("min", "1880").attr("max", "2013");
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("svg").remove();
+      const line = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["g" /* line */]()
+        .x(d => (x(d.Year)))
+        .y(d => (y(d.seaLevels)));
 
-      const input = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input")
-      .on("change", handleSliderChange);
+      const svg = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevels").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
 
-      function handleSliderChange() {
-        const yr = input._groups[0][0].value;
-        __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").text("");
-        __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").text("");
-        const year = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").append("text")
-        .text(yr);
-        const seaLevel = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").append("text")
-        .text(Math.round(table[yr]));
-        focus.select("circle.y")
-          .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
-          .attr("display", null);
-        __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".value").text(yr);
-      }
+      const focus = svg.append("g")
+        .style("display", "none");
+
+      const table = {};
+
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["d" /* csv */]("sealevels.csv", (error, data) => {
+        if (error) throw error;
+        data.forEach (d => {
+          d.Year = +d.Year;
+          d.seaLevels = +d.seaLevels;
+          table[+d.Year] = +d.seaLevels;
+        });
+
+        x.domain([1880, 2013]);
+        y.domain(__WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["e" /* extent */](data, (d => (d.seaLevels))));
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+        svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+        const path = svg.append("path")
+          .data([data])
+          .attr("class", "line")
+          .attr("d", line)
+          .attr("stroke", "orange")
+          .attr("stroke-width", 2)
+          .attr("fill", "none");
+
+        focus.append("circle")
+          .attr("class", "y")
+          .style("fill", "orange")
+          .attr("r", 4);
+
+        svg.append("rect")
+          .attr("width", width)
+          .attr("height", height)
+          .style("fill", "none")
+          .style("pointer-events", "all")
+          .on("mouseover", handleMouseOver)
+          .on("mousemove", handleMouseMove);
+
+          const input = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input")
+          .on("change", handleSliderChange);
+
+          function handleSliderChange() {
+            const yr = input._groups[0][0].value;
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").text("");
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").text("");
+            const year = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").append("text")
+            .text(yr);
+            const seaLevel = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").append("text")
+            .text(Math.round(table[yr]));
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(yr) + "," + y(table[yr]) + ")")
+              .attr("display", null);
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".value").text(yr);
+          }
 
 
-      function handleMouseOver () {
-        focus.style("display", null);
-      }
+          function handleMouseOver () {
+            focus.style("display", null);
+          }
 
-      function handleMouseMove() {
-        const x0 = x.invert(__WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["h" /* mouse */](this)[0]),
-          i = bisectYear(data, x0, 1),
-          d0 = data[i - 1],
-          d1 = data[i],
-          d = x0 - d0.Year > d1.Year - x0 ? d1 : d0;
-        __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").text("");
-        __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").text("");
-        const year = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").append("text")
-        .text(d.Year);
-        const seaLevel = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").append("text")
-        .text(Math.round(d.seaLevels));
+          function handleMouseMove() {
+            const x0 = x.invert(__WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["h" /* mouse */](this)[0]),
+              i = bisectYear(data, x0, 1),
+              d0 = data[i - 1],
+              d1 = data[i],
+              d = x0 - d0.Year > d1.Year - x0 ? d1 : d0;
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").text("");
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").text("");
+            const year = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".year").append("text")
+            .text(d.Year);
+            const seaLevel = __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".seaLevel").append("text")
+            .text(Math.round(d.seaLevels));
 
-        focus.select("circle.y")
-          .attr("transform", "translate (" + x(d.Year) + "," + y(d.seaLevels) + ")");
+            focus.select("circle.y")
+              .attr("transform", "translate (" + x(d.Year) + "," + y(d.seaLevels) + ")");
 
-        __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".value").text(d.Year);
-        __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input")._groups[0][0].value = d.Year;
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */](".value").text(d.Year);
+            __WEBPACK_IMPORTED_MODULE_0__node_modules_d3__["j" /* select */]("input")._groups[0][0].value = d.Year;
 
-      }
+          }
 
-      function handleMouseOut () {
-        focus.style("display", "none");
-      }
-  });
+          function handleMouseOut () {
+            focus.style("display", "none");
+          }
+      });
+    }
+}
 
 
 /***/ }),
